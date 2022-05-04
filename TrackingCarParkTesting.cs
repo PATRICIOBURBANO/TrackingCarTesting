@@ -10,7 +10,7 @@ namespace TrackingCarTesting
 
 
         [TestMethod]
-        public void AddingVehicle()
+        public void CheckAddingVehicle()
         {
             //Arrange
 
@@ -27,8 +27,27 @@ namespace TrackingCarTesting
             Assert.IsTrue(vehicle1 != null);
         }
 
+
         [TestMethod]
-        public void RemovingVehicle()
+        public void CheckOverCapacity()
+        {
+            //Arrange
+            int capacity = 5;
+            string locationName = "550Portage";
+
+            //Act
+            var testTracker = new VehicleTracker(capacity, locationName);
+            var vehicle1 = new Vehicle("JJJ000", false);
+            testTracker.AddVehicle(vehicle1);
+
+
+            //Assert
+            Assert.AreEqual(capacity, testTracker.Capacity);
+
+        }
+
+        [TestMethod]
+        public void CheckRemovingVehicle()
         {
             //Arrange
 
@@ -45,24 +64,6 @@ namespace TrackingCarTesting
             Assert.IsTrue(vehicle1 != null);    
         }
 
-
-        [TestMethod]
-        public void CheckOverCapacity()
-        {
-            //Arrange
-            int capacity = 5;
-            string locationName = "550Portage";
-            
-             //Act
-            var testTracker = new VehicleTracker(capacity, locationName);
-            var vehicle1 = new Vehicle("JJJ000",false);
-            testTracker.AddVehicle(vehicle1);
-
-
-            //Assert
-            Assert.AreEqual(capacity, testTracker.Capacity);
-                
-        }
 
 
         [TestMethod]
@@ -81,5 +82,50 @@ namespace TrackingCarTesting
             //Assert
             Assert.AreEqual(testTracker.SlotsAvailable, 0);
         }
+
+        [TestMethod]
+        public void AddVehicleException()
+        {
+            //Arrange
+            int capacity = 2;
+            string locationName = "550Portage";
+
+            //Act
+            var testTracker = new VehicleTracker(capacity, locationName);
+            var vehicle1 = new Vehicle("XXX111", false);
+            var vehicle2 = new Vehicle("yyyy111", false);
+            var vehicle3 = new Vehicle("zzz111", false);
+
+
+            //Assert
+            Assert.ThrowsException<IndexOutOfRangeException>(() =>
+            {
+
+                testTracker.AddVehicle(vehicle1);
+                testTracker.AddVehicle(vehicle2);
+                testTracker.AddVehicle(vehicle3);
+
+            });
+        }
+            [TestMethod]
+            public void CheckPercentagePassed()
+            {
+                //Arrange
+                int capacity = 2;
+                string locationName = "550Portage";
+
+                //Act
+                var testTracker = new VehicleTracker(capacity, locationName);
+                var vehicle1 = new Vehicle("XXX111", false);
+                var vehicle2 = new Vehicle("yyyy111", false);
+
+                testTracker.AddVehicle(vehicle1);
+                testTracker.AddVehicle(vehicle2);
+
+
+            //Assert
+            Assert.AreEqual(capacity, testTracker.VehicleList.Count);
+           
+            }
     }
 }
